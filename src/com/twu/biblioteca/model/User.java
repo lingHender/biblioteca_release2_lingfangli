@@ -27,6 +27,10 @@ public class User {
         this.login = false;
     }
 
+    public String print(){
+        return String.format("%-20s%-16s%-16s\n", this.getName(), this.getEmail(), this.getPhoneNumber());
+
+    }
     public String getName() {
         return name;
     }

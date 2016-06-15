@@ -7,32 +7,59 @@ import java.util.Iterator;
 import java.util.List;
 
 public class MovieRepository {
-    public static final List<Movie> MOVIES_LIST =
-            new ArrayList<Movie>() {
-                {
-                    add(new Movie("Zootopia", "2016", "Byron Howard",9.2f));
-                    add(new Movie("Titanic", "1997", "James Cameron",9.1f));
-                    add(new Movie("Warcraft", "2016", "Duncan Jones"));
-                }
-            };
-
-    public Iterator<Movie> findAllMovies() {
-        return MOVIES_LIST.iterator();
+    public List<Movie> MOVIE_LIST ;
+    public MovieRepository(List<Movie> movies) {
+        this.MOVIE_LIST  = movies;
     }
 
-    public boolean  movieChecked(String movieName,String libraryNumber){
-        boolean result = false;
-        Iterator<Movie>  it = MOVIES_LIST.iterator();
+
+    public List<Movie> findAllCheckedMovies() {
+        List<Movie> checkedMoives = new ArrayList<Movie>();
+        Iterator<Movie> it = MOVIE_LIST.iterator();
         while(it.hasNext()){
             Movie movie = it.next();
-            if(movie.getName().equals(movieName)&&!movie.isChecked()){
-                movie.setChecked(true);
-                movie.setCheckUser(libraryNumber);
-                result = true;
-                break;
+            if(movie.isChecked()){
+                checkedMoives.add(movie);
             }
         }
-        return result;
+        return checkedMoives;
     }
 
+    public boolean  checkMoive(String movieId,String libraryNumber){
+        Iterator<Movie>  it = MOVIE_LIST.iterator();
+        while(it.hasNext()){
+            Movie movie = it.next();
+            if(movie.getMovieId().equals(movieId)&&!movie.isChecked()){
+                movie.setChecked(true);
+                movie.setCheckUser(libraryNumber);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean returnMovie(String movieId,String libraryNumber){
+        Iterator<Movie> it = MOVIE_LIST.iterator();
+        while(it.hasNext()){
+            Movie movie = it.next();
+            if(movie.getMovieId().equals(movieId)&&movie.isChecked()&&movie.getCheckUser().equals(libraryNumber)){
+                movie.setChecked(false);
+                movie.setCheckUser(null);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public String listMovies(){
+        String str = "";
+        Iterator<Movie> it = MOVIE_LIST.iterator();
+        while(it.hasNext()){
+            Movie movie = it.next();
+            if(!movie.isChecked()) {
+                str += movie.print();
+            }
+        }
+        return str;
+    }
 }
